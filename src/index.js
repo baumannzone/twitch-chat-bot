@@ -19,22 +19,49 @@ const client = new tmi.Client({
   channels: [BAUMANNZONE, GUIDESMITHS],
 });
 
+const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
+
+const answers = [
+  "Yes VoteYEA",
+  "MercyWing1 Of course MercyWing2",
+  "Nope VoteNay",
+  "I don't think so... LUL",
+  "Really? MaxLOL",
+  "Absolutely SeemsGood",
+];
+
+const randomNumber = (min, max) =>
+  Math.floor(Math.random() * (max - min)) + min;
+
 const commands = {
-  [GUIDESMITHS]: {
-    topic: {
-      response: `Agenda: 
+  love: {
+    response: (user) => `Have some love, @${user} <3`,
+  },
+  question: {
+    response: (argument) =>
+      argument
+        ? answers[randomNumber(0, answers.length)]
+        : "Where is the question? LUL",
+  },
+  info: {
+    response: () => "https://guidesmeetups03.eventbrite.es/",
+  },
+  gs: {
+    response: () => "https://www.guidesmiths.com/",
+  },
+  dcsl: {
+    response: () => "https://www.dcsl.com/",
+  },
+  topic: {
+    response: () => `Agenda:
     💊 ".NET Pill" by Kamran Poursohrab (EN) -
     💬 "IT restart" by Sofía Sánchez (ES) -
     🙏 "God's questions" by Clara Dios (ES) -
     💬 "Digitalization in the Publishing world" by Linda de Leeuw (EN) -
     😎 "Data Science tour" - Rabadán - ES`,
-    },
-    gs: {
-      response: "https://www.guidesmiths.com/",
-    },
-    dcsl: {
-      response: "https://www.dcsl.com/",
-    },
+  },
+  commands: {
+    response: () => `${Object.keys(commands).map((c) => ` !${c}`)}`,
   },
 };
 
@@ -51,17 +78,10 @@ const greetings = [
 
 client.connect().catch(console.error);
 
-// Register our event handlers (defined below)
 client.on("connected", (addr, port) => {
   console.log(`* Connected to ${addr}:${port}`);
 });
 
-/**
- *
- * @param message
- * @param channel
- * @param context
- */
 const checkGrettings = ({ message, channel, context }) => {
   if (greetings.includes(message.toLowerCase())) {
     client.say(channel, `${message}, @${context.username} HeyGuys`);
@@ -74,12 +94,23 @@ client.on("message", async (channel, context, message, self) => {
     return;
   }
 
-  console.log({ message });
-  console.log({ context });
-
-  if (message.startsWith("!")) {
+  if (
+    message.startsWith("!") &&
+    message.length > 1 &&
+    regexpCommand.test(message)
+  ) {
     // Check commands
+    const [raw, command, argument] = message.match(regexpCommand);
+
+    if (commands.hasOwnProperty(command)) {
+      client.say(channel, commands[command].response(argument));
+    }
   } else {
     checkGrettings({ message, channel, context });
+
+    if (randomNumber(1, 10) < 5) {
+      const msg = `What's up! Squid1 Squid2 Squid3 Squid2 Squid4 @${context.username}`;
+      client.say(channel, msg);
+    }
   }
 });
