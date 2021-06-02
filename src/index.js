@@ -35,7 +35,8 @@ const randomNumber = (min, max) =>
 
 const commands = {
   love: {
-    response: (user) => `Have some love, @${user} <3`,
+    response: (user) =>
+      user ? `Have some love, @${user} <3` : 'Missing "@user" argument :(',
   },
   question: {
     response: (argument) =>
@@ -61,7 +62,10 @@ const commands = {
     😎 "Data Science tour" - Rabadán - ES`,
   },
   commands: {
-    response: () => `${Object.keys(commands).map((c) => ` !${c}`)}`,
+    response: () =>
+      `Available commands: ${Object.keys(commands)
+        .map((c) => `!${c}`)
+        .join(", ")}`,
   },
 };
 
@@ -88,6 +92,13 @@ const checkGrettings = ({ message, channel, context }) => {
   }
 };
 
+const randomSquid = ({ channel, context }) => {
+  if (randomNumber(1, 100) > 98) {
+    const msg = `Hey, what's up? Squid1 Squid2 Squid3 Squid2 Squid4 @${context.username}`;
+    client.say(channel, msg);
+  }
+};
+
 client.on("message", async (channel, context, message, self) => {
   // Ignore messages from the bot
   if (self) {
@@ -107,10 +118,6 @@ client.on("message", async (channel, context, message, self) => {
     }
   } else {
     checkGrettings({ message, channel, context });
-
-    if (randomNumber(1, 10) < 5) {
-      const msg = `What's up! Squid1 Squid2 Squid3 Squid2 Squid4 @${context.username}`;
-      client.say(channel, msg);
-    }
+    randomSquid({ channel, context });
   }
 });
