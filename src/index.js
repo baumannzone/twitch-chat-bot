@@ -21,8 +21,8 @@ const client = new tmi.Client({
 
 const regexpCommand = new RegExp(/^!([a-zA-Z0-9]+)(?:\W+)?(.*)?/);
 
-const answers = [
-  "Yes VoteYEA",
+const yesNoAnswers = [
+  "Yes VoteYea",
   "MercyWing1 Of course MercyWing2",
   "Nope VoteNay",
   "I don't think so... LUL",
@@ -33,61 +33,76 @@ const answers = [
 const randomNumber = (min, max) =>
   Math.floor(Math.random() * (max - min)) + min;
 
+const love = (user) =>
+  user ? `Have some love, @${user} <3` : 'Missing "@user" argument :(';
+
+const yesNoQuestion = (argument) =>
+  argument
+    ? yesNoAnswers[randomNumber(0, yesNoAnswers.length)]
+    : "Where is the question? LUL";
+
 const commands = {
-  love: {
-    response: (user) =>
-      user ? `Have some love, @${user} <3` : 'Missing "@user" argument :(',
+  [BAUMANNZONE]: {
+    rambitonews: {
+      response: () =>
+        "PowerUpL Suscríbete a las Rambito News: https://www.getrevue.co/profile/baumannzone PowerUpR",
+    },
+    love: {
+      response: (user) => love(user),
+    },
+    yesno: {
+      response: (arg) => yesNoQuestion(arg),
+    },
+    comandos: {
+      response: () =>
+        `Comandos disponibles: ${Object.keys(commands[BAUMANNZONE])
+          .map((c) => `!${c}`)
+          .join(", ")}`,
+    },
   },
-  question: {
-    response: (argument) =>
-      argument
-        ? answers[randomNumber(0, answers.length)]
-        : "Where is the question? LUL",
-  },
-  info: {
-    response: () => "https://guidesmeetups03.eventbrite.es/",
-  },
-  gs: {
-    response: () => "https://www.guidesmiths.com/",
-  },
-  dcsl: {
-    response: () => "https://www.dcsl.com/",
-  },
-  topic: {
-    response: () => `Agenda:
+  [GUIDESMITHS]: {
+    love: {
+      response: (user) => love(user),
+    },
+    question: {
+      response: (arg) => yesNoQuestion(arg),
+    },
+    info: {
+      response: () => "https://guidesmeetups03.eventbrite.es/",
+    },
+    gs: {
+      response: () => "https://www.guidesmiths.com/",
+    },
+    dcsl: {
+      response: () => "https://www.dcsl.com/",
+    },
+    topic: {
+      response: () => `Agenda:
     💊 ".NET Pill" by Kamran Poursohrab (EN) -
     💬 "IT restart" by Sofía Sánchez (ES) -
     🙏 "God's questions" by Clara Dios (ES) -
     💬 "Digitalization in the Publishing world" by Linda de Leeuw (EN) -
     😎 "Data Science tour" - Rabadán - ES`,
-  },
-  commands: {
-    response: () =>
-      `Available commands: ${Object.keys(commands)
-        .map((c) => `!${c}`)
-        .join(", ")}`,
-  },
-  rambitonews: {
-    response: () =>
-      "PowerUpL Suscríbete a las Rambito News: https://www.getrevue.co/profile/baumannzone PowerUpR",
+    },
+    commands: {
+      response: () =>
+        `Available commands: ${Object.keys(commands)
+          .map((c) => `!${c}`)
+          .join(", ")}`,
+    },
   },
 };
 
 const greetings = [
   "vuenas",
-  "vuenas!",
   "vue-nas",
-  "vue-nas!",
   "buenas",
-  "buenas!",
   "hola",
   "hey",
   "hi",
   "hello",
-  "hola!",
-  "hey!",
-  "hi!",
-  "hello!",
+  "alo",
+  "alo",
 ];
 
 client.connect().catch(console.error);
@@ -115,6 +130,9 @@ client.on("message", async (channel, context, message, self) => {
     return;
   }
 
+  // Remove first character. Channel is `#channelName`
+  const cleanChannel = channel.split("#")[1];
+
   if (
     message.startsWith("!") &&
     message.length > 1 &&
@@ -123,8 +141,8 @@ client.on("message", async (channel, context, message, self) => {
     // Check commands
     const [raw, command, argument] = message.match(regexpCommand);
 
-    if (commands.hasOwnProperty(command)) {
-      client.say(channel, commands[command].response(argument));
+    if (commands[cleanChannel].hasOwnProperty(command)) {
+      client.say(channel, commands[cleanChannel][command].response(argument));
     }
   } else {
     checkGrettings({ message, channel, context });
