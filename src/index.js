@@ -67,9 +67,17 @@ const commands = {
         .map((c) => `!${c}`)
         .join(", ")}`,
   },
+  rambitonews: {
+    response: () =>
+      "PowerUpL Suscríbete a las Rambito News: https://www.getrevue.co/profile/baumannzone PowerUpR",
+  },
 };
 
 const greetings = [
+  "vuenas",
+  "vuenas!",
+  "vue-nas",
+  "vue-nas!",
   "buenas",
   "buenas!",
   "hola",
