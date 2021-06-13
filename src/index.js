@@ -70,6 +70,8 @@ const commands = {
 };
 
 const greetings = [
+  "buenas",
+  "buenas!",
   "hola",
   "hey",
   "hi",
