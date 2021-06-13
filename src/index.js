@@ -93,7 +93,7 @@ const commands = {
   },
 };
 
-const greetings = [
+const simpleGreetings = [
   "vuenas",
   "vue-nas",
   "buenas",
@@ -102,8 +102,18 @@ const greetings = [
   "hi",
   "hello",
   "alo",
-  "alo",
 ];
+const greetings = simpleGreetings.reduce((acc, val) => {
+  acc.push(
+    val,
+    val + "!",
+    val + "!!",
+    val + "!!!",
+    "¡" + val + "!",
+    "¡¡" + val + "!!"
+  );
+  return acc;
+}, []);
 
 client.connect().catch(console.error);
 
@@ -111,9 +121,11 @@ client.on("connected", (addr, port) => {
   console.log(`* Connected to ${addr}:${port}`);
 });
 
-const checkGrettings = ({ message, channel, context }) => {
-  if (greetings.includes(message.toLowerCase())) {
-    client.say(channel, `${message}, @${context.username} HeyGuys`);
+const checkGreetings = ({ message, channel, context }) => {
+  const firstWord = message.split(" ")[0];
+
+  if (greetings.includes(firstWord.toLowerCase())) {
+    client.say(channel, `${firstWord}, @${context.username} HeyGuys`);
   }
 };
 
@@ -145,7 +157,7 @@ client.on("message", async (channel, context, message, self) => {
       client.say(channel, commands[cleanChannel][command].response(argument));
     }
   } else {
-    checkGrettings({ message, channel, context });
+    checkGreetings({ message, channel, context });
     randomSquid({ channel, context });
   }
 });
