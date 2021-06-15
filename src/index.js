@@ -102,6 +102,8 @@ const simpleGreetings = [
   "hi",
   "hello",
   "alo",
+  "yo",
+  "y0",
 ];
 const greetings = simpleGreetings.reduce((acc, val) => {
   acc.push(
@@ -122,10 +124,8 @@ client.on("connected", (addr, port) => {
 });
 
 const checkGreetings = ({ message, channel, context }) => {
-  const firstWord = message.split(" ")[0];
-
-  if (greetings.includes(firstWord.toLowerCase())) {
-    client.say(channel, `${firstWord}, @${context.username} HeyGuys`);
+  if (greetings.includes(message.toLowerCase())) {
+    client.say(channel, `${message}, @${context.username} HeyGuys`);
   }
 };
 
