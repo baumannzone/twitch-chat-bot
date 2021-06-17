@@ -45,7 +45,7 @@ const commands = {
   [BAUMANNZONE]: {
     cursoplatzi: {
       response: () =>
-        "Curso de Vue.js avanzado en platzi: https://platzi.com/cursos/avanzado-vue/ SeemsGood",
+        "Curso de Vue avanzado en platzi: https://platzi.com/cursos/avanzado-vue/ SeemsGood",
     },
     rambitonews: {
       response: () =>
