@@ -43,6 +43,10 @@ const yesNoQuestion = (argument) =>
 
 const commands = {
   [BAUMANNZONE]: {
+    cursoplatzi: {
+      response: () =>
+        "Curso de Vue.js avanzado en platzi: https://platzi.com/cursos/avanzado-vue/ SeemsGood",
+    },
     rambitonews: {
       response: () =>
         "PowerUpL Suscríbete a las Rambito News: https://www.getrevue.co/profile/baumannzone PowerUpR",
