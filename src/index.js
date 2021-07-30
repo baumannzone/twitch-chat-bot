@@ -57,6 +57,12 @@ const commands = {
     yesno: {
       response: (arg) => yesNoQuestion(arg),
     },
+    web: {
+      response: () => 'TheIlluminati https://baumannzone.dev',
+    },
+    uses: {
+      response: () => 'DoritosChip https://baumannzone.dev/uses',
+    },
     comandos: {
       response: () =>
         `Comandos disponibles: ${Object.keys(commands[BAUMANNZONE])
