@@ -114,6 +114,8 @@ const simpleGreetings = [
   "alo",
   "yo",
   "y0",
+  "ola k ase",
+  "ola ke ase"
 ];
 const greetings = simpleGreetings.reduce((acc, val) => {
   acc.push(
@@ -122,7 +124,9 @@ const greetings = simpleGreetings.reduce((acc, val) => {
     val + "!!",
     val + "!!!",
     "¡" + val + "!",
-    "¡¡" + val + "!!"
+    "¡¡" + val + "!!",
+    val + "?",
+    val + "??",
   );
   return acc;
 }, []);
