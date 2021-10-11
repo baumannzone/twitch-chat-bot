@@ -5,7 +5,7 @@ require("dotenv").config();
 
 const BOT_NAME = "botmannzone";
 const BAUMANNZONE = "baumannzone";
-const GUIDESMITHS = "guidesmiths";
+const GUIDESMITHS = "dcsl_guidesmiths";
 
 const client = new tmi.Client({
   options: { debug: true },
@@ -58,10 +58,10 @@ const commands = {
       response: (arg) => yesNoQuestion(arg),
     },
     web: {
-      response: () => 'TheIlluminati https://baumannzone.dev',
+      response: () => "TheIlluminati https://baumannzone.dev",
     },
     uses: {
-      response: () => 'DoritosChip https://baumannzone.dev/uses',
+      response: () => "DoritosChip https://baumannzone.dev/uses",
     },
     comandos: {
       response: () =>
@@ -115,7 +115,7 @@ const simpleGreetings = [
   "yo",
   "y0",
   "ola k ase",
-  "ola ke ase"
+  "ola ke ase",
 ];
 const greetings = simpleGreetings.reduce((acc, val) => {
   acc.push(
@@ -126,7 +126,7 @@ const greetings = simpleGreetings.reduce((acc, val) => {
     "¡" + val + "!",
     "¡¡" + val + "!!",
     val + "?",
-    val + "??",
+    val + "??"
   );
   return acc;
 }, []);
@@ -165,7 +165,7 @@ client.on("message", async (channel, context, message, self) => {
     regexpCommand.test(message)
   ) {
     // Check commands
-    const [raw, command, argument] = message.match(regexpCommand);
+    const [, command, argument] = message.match(regexpCommand);
 
     if (commands[cleanChannel].hasOwnProperty(command)) {
       client.say(channel, commands[cleanChannel][command].response(argument));
